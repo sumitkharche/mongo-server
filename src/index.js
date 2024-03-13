@@ -148,9 +148,14 @@ app.get('/download/:filename', async (req, res) => {
 // Get all uploaded files
 app.get('/files', async (req, res) => {
     try {
-        if (!database) {
-            return res.status(500).send('Database connection not established');
-        }
+        // if (!database) {
+        //     return res.status(500).send('Database connection not established');
+        // }
+        // Connect to the MongoDB cluster
+        await client.connect();
+
+        // Access the database
+        const database = client.db('college');
 
         const bucket = new GridFSBucket(database);
 
@@ -171,6 +176,10 @@ app.get('/files', async (req, res) => {
         res.status(500).send('Error fetching files');
     }
 });
+
+app.get('/', (req,rew)=>{
+        rew.send('hi there1');
+    });
 
 // Start the server
 app.listen(port, () => {
